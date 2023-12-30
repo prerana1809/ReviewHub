@@ -8,11 +8,26 @@ app.use(cors());
 
 const { MongoClient } = require("mongodb");
 // Connection URI
-const uri = "mongodb://localhost:27017";
-// Create a new MongoClient
+const uri = "mongodb://0.0.0.0:27017/reviewhub";
 const client = new MongoClient(uri);
+async function connectToDatabase() {
+    try {
+      // Connect to the MongoDB server
+      await client.connect();
+  
+      console.log('Connected to the database.');
+      // Do your database operations here...
+  
+    } catch (error) {
+      console.error('Unable to connect to the database:', error);
+    }
+}
+connectToDatabase()
+// Create a new MongoClient
+
 const database=client.db("reviewhub");
 const reviews=database.collection("reviews");
+const comments=database.collection("comments");
 
 app.get('/reviews', async(req, res)=>{
     const type=req.query.type;
@@ -29,6 +44,25 @@ app.get('/reviews', async(req, res)=>{
 app.post('/reviews', async(req, res)=>{
     const doc={...req.body};
     const result=await reviews.insertOne(doc);
+    res.send({
+        status: "OK"
+    })
+})
+
+app.get('/comments', async(req, res)=>{
+    const type=req.query.type;
+    const query={"type": type};
+    const comments_result=comments.find(query);
+    const result=[];
+    await comments_result.forEach((item)=>{
+        result.push(item);
+    });
+    res.send({"comments": result});
+})
+
+app.post('/comments', async(req, res)=>{
+    const doc={...req.body};
+    const result=await comments.insertOne(doc);
     res.send({
         status: "OK"
     })
