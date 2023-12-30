@@ -1,5 +1,8 @@
 import axios from "axios";
 import React from "react";
+import CommentInput from "./commentInput";
+import CommentList from "./commentList";
+import './ReviewHub.css'
 
 export default class ReviewList extends React.Component{
     constructor(props){
@@ -19,7 +22,9 @@ export default class ReviewList extends React.Component{
             ...prevState,
             reviews: response.data.reviews
         }))
-    }
+    }       
+
+    
 
     componentDidMount(){
         this.loadReviews();
@@ -28,11 +33,21 @@ export default class ReviewList extends React.Component{
     render(){
         return(
             <div>
+
                 {this.state.reviews.map((review) => {
                     return(
-                        <div>
-                            <p>rating: {review.rating}/5</p>
-                            <p>{review.text}</p><br/>
+                        <div className="box">
+                            <h2>Rating: {review.rating}/5</h2>
+                            <h3 className="box">{review.text}</h3>
+                            <h4>{review.timestamp}</h4> {/* Display timestamp here */}
+                            <br/>
+                            <div>
+                            <h4>Comments:</h4>
+                            <br/>
+                            <CommentList r_id= {review._id} />
+                            <CommentInput r_id= {review._id} /><br/>
+                            
+                            </div>
                         </div>
                     )
                 })}
