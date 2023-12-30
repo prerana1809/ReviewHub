@@ -1,3 +1,5 @@
+ReviewHub is a dynamic web application built on the MERN stack, showcasing anonymous users' ratings, reviews, and comments.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
